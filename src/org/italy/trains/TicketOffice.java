@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class TicketOffice {
 
 	public static void main(String[] args) {
-; 
 		try {
 			Scanner scn = new Scanner(System.in);
 			System.out.println("Il biglietto è flessibile?");
