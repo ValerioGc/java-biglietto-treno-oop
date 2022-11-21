@@ -7,16 +7,12 @@ public class Ticket {
 	private int pKm;
 	private int pAge;
 	
-//	private static final double KM_PRICE = 0.21;
-//	private static final int UNDER_DISCOUNT = 20;
-//	private static final int OVER_DISCOUNT = 40;
-	
 	private static final BigDecimal KM_PRICE = new BigDecimal(.21);
 	private static final BigDecimal UNDER_DISCOUNT = new BigDecimal(20);
 	private static final BigDecimal OVER_DISCOUNT = new BigDecimal(40);
 	
 	//Milestone 3
-	private LocalDate date;
+	private LocalDate date; 
 	private boolean flex;
 	
 	private static final int STANDARD_DURATION = 30;
@@ -76,9 +72,7 @@ public class Ticket {
 //	Calcolo prezzo
 	public float calcPrice() {
 		BigDecimal pKm2 = new BigDecimal(pKm);
-		
 		BigDecimal price = pKm2.multiply(KM_PRICE);
-	
 		BigDecimal discount = calcDiscount(price, pAge);
 		BigDecimal divisor = new BigDecimal(100);
 		BigDecimal overp = new BigDecimal(10);
@@ -100,30 +94,7 @@ public class Ticket {
 		} 
 		return kmDB;
 	}
-	
-////	Calcolo prezzo
-//	public double calcPrice() {
-//		double price = ((double)pKm) * KM_PRICE;
-//		double discount = calcDiscount(price, pAge);
-//		if (isFlex()) {
-//			price += (price * 10) / 100;
-//		}
-//		return price - discount;
-//	}
-//	
-////	Calcolo Sconto
-//	private double calcDiscount(double price, int age) {
-//		double discount;
-//		if (pAge <= 18) {			
-//			discount = (price * UNDER_DISCOUNT) / 100;
-//		} else if (pAge >= 65 ) {
-//			discount = (price * OVER_DISCOUNT) / 100;
-//		} else {
-//			discount = 0;
-//		}
-//		return discount;
-//	}
-	
+		
 // Calcolo data scadenza
 	private LocalDate calcExpDate(LocalDate date) {
 		LocalDate expDate;
@@ -138,7 +109,6 @@ public class Ticket {
 	private String translateBoolFlex(){	
 		return isFlex()? "Si":"No";
 	}
-
 	
 	@Override
 	public String toString() {
