@@ -1,5 +1,7 @@
 package org.italy.trains;
 
+import java.time.LocalDate;
+
 public class Ticket {
 	private int pKm;
 	private int pAge;
@@ -8,28 +10,35 @@ public class Ticket {
 	private static final int UNDER_DISCOUNT = 20;
 	private static final int OVER_DISCOUNT = 40;
 	
-	public Ticket(int pAge, int pKm) throws Exception {
+	//Milestone 3
+	private String date;
+	private boolean flex;
+	
+	private static final int STANDARD_DURATION = 30;
+	private static final int FLEX_DURATION = 90;
+	
+	public Ticket(int pAge, int pKm, boolean flex) throws Exception {
 		setpAge(pAge);
 //		isValidAge(pAge);
 		setpKm(pKm);
 //		isValidKm(pKm);
+		setFlex(flex);
+		setDate();
 	}
 
 	public int getpAge() {
 		return pAge;
 	}
-	
 	public void setpAge(int pAge) throws Exception {
 		if (!isValidAge(pAge)) {			
 			throw new Exception("Inserisci un età valida");
 		}
 		this.pAge = pAge;
 	}
-	
+
 	public int getpKm() {
 		return pKm;
 	}
-
 	public void setpKm(int pKm) throws Exception {
 		
 		if (!isValidKm(pKm)){			
@@ -38,7 +47,25 @@ public class Ticket {
 		this.pKm = pKm;
 	}
 	
-//	Controllo inserimento dati
+	
+	
+	public String getDate() {
+		return date;
+	}
+	public void setDate() {
+		LocalDate today = LocalDate.now();
+		String formDate = today.toString();
+		this.date = formDate;
+	}
+
+	public boolean isFlex() {
+		return flex;
+	}
+	public void setFlex(boolean flex) {
+		this.flex = flex;
+	}
+
+	//	Controllo inserimento dati
 	public boolean isValidAge(int pAge) throws Exception {
 		if ((pAge < 1) || (pAge > 120)) {			
 			throw new Exception("Inserisci un età valida");
@@ -56,6 +83,9 @@ public class Ticket {
 	public double calcPrice() {
 		double price = ((double)pKm) * KM_PRICE;
 		double discount = calcDiscount(price, pAge);
+		if (isFlex()) {
+			price += (price * 10) / 100;
+		}
 		return price - discount;
 	}
 	
@@ -72,11 +102,27 @@ public class Ticket {
 		return discount;
 	}
 	
+// Calcolo data scadenza
+	private String calcExpDate(String date) {
+		LocalDate today = LocalDate.now();
+		LocalDate expDate;
+		if (isFlex()) {
+		    expDate = today.plusDays(FLEX_DURATION);
+		} else {			
+			expDate = today.plusDays(STANDARD_DURATION);
+		}
+		String formExpDate = expDate.toString();
+		return formExpDate;
+	}
+
 	@Override
 	public String toString() {
 		return "\nDistanza da percorrere: " + getpKm()  + " km"
 				+ "\nEtà passeggero: " + getpAge()  + " anni"
 				+ "\nPrezzo: " + calcPrice() + " euro"
+				+ "\nFlessibile: " + isFlex()
+				+ "\nData acquisto: " + getDate() 
+				+ "\nScadenza: " + calcExpDate(date) 
 				+ "\n----------------------------------\n";
 	}
 }
