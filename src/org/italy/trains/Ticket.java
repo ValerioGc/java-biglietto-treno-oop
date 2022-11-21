@@ -56,16 +56,11 @@ public class Ticket {
 //		}
 //	}
 	
-	
-	
-	
-
 	public double calcPrice() {
 		
 		double price = ((double)pKm) * KM_PRICE;
-		double discount = (price * 20) / 100;
-		
-		discount = calcDiscount(price, pAge);
+
+		double discount = calcDiscount(price, pAge);
 		
 		return price - discount;
 	}
