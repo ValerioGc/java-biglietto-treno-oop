@@ -57,18 +57,14 @@ public class Ticket {
 //	}
 	
 	public double calcPrice() {
-		
 		double price = ((double)pKm) * KM_PRICE;
-
 		double discount = calcDiscount(price, pAge);
-		
 		return price - discount;
 	}
 	
 	
 	private double calcDiscount(double price, int age) {
 		double discount;
-
 		if (pAge <= 18) {			
 			discount = (price * UNDER_DISCOUNT) / 100;
 		} else if (pAge >= 65 ) {
