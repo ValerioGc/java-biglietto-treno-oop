@@ -20,7 +20,7 @@ public class Ticket {
 	}
 	
 	public void setpAge(int pAge) throws Exception {
-		if ((pAge < 0)|| (pAge > 120)) {			
+		if (!isValidAge(pAge)) {			
 			throw new Exception("Inserisci un età valida");
 		}
 		this.pAge = pAge;
@@ -32,37 +32,34 @@ public class Ticket {
 
 	public void setpKm(int pKm) throws Exception {
 		
-		if (pKm == 0){			
+		if (!isValidKm(pKm)){			
 			throw new Exception("Inserisci una distanza valida");
 		}
 		this.pKm = pKm;
 	}
-
 	
-//	public void isValidAge(int pAge) throws Exception {
-//		if ((pAge < 1) || (pAge > 120)) {			
-//			throw new Exception("Inserisci un età valida");
-//		}
-//		else {
-//			setpAge(pAge);
-//		}
-//	} 	
-//	public void isValidKm(double pKm) throws Exception {
-//		if (pKm == 0) {			
-//			throw new Exception("Inserisci un età valida");
-//		}
-//		else {
-//			setpKm(pKm);
-//		}
-//	}
+//	Controllo inserimento dati
+	public boolean isValidAge(int pAge) throws Exception {
+		if ((pAge < 1) || (pAge > 120)) {			
+			throw new Exception("Inserisci un età valida");
+		} 
+		return true;
+	} 	
+	public boolean isValidKm(double pKm) throws Exception {
+		if (pKm == 0) {			
+			throw new Exception("Inserisci un età valida");
+		}
+		return true;
+	}
 	
+//	Calcolo prezzo
 	public double calcPrice() {
 		double price = ((double)pKm) * KM_PRICE;
 		double discount = calcDiscount(price, pAge);
 		return price - discount;
 	}
 	
-	
+//	Calcolo Sconto
 	private double calcDiscount(double price, int age) {
 		double discount;
 		if (pAge <= 18) {			
@@ -77,8 +74,8 @@ public class Ticket {
 	
 	@Override
 	public String toString() {
-		return "Distanza da percorrere: " + pKm + "km"
-				+ "\nEtà passeggero: " + pAge + " anni"
+		return "\nDistanza da percorrere: " + getpKm()  + " km"
+				+ "\nEtà passeggero: " + getpAge()  + " anni"
 				+ "\nPrezzo: " + calcPrice() + " euro"
 				+ "\n----------------------------------\n";
 	}
