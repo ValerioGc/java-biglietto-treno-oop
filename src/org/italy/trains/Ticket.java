@@ -1,17 +1,22 @@
 package org.italy.trains;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Ticket {
 	private int pKm;
 	private int pAge;
 	
-	private static final double KM_PRICE = 0.21;
-	private static final int UNDER_DISCOUNT = 20;
-	private static final int OVER_DISCOUNT = 40;
+//	private static final double KM_PRICE = 0.21;
+//	private static final int UNDER_DISCOUNT = 20;
+//	private static final int OVER_DISCOUNT = 40;
+	
+	private static final BigDecimal KM_PRICE = new BigDecimal(.21);
+	private static final BigDecimal UNDER_DISCOUNT = new BigDecimal(20);
+	private static final BigDecimal OVER_DISCOUNT = new BigDecimal(40);
 	
 	//Milestone 3
-	private String date;
+	private LocalDate date;
 	private boolean flex;
 	
 	private static final int STANDARD_DURATION = 30;
@@ -19,9 +24,7 @@ public class Ticket {
 	
 	public Ticket(int pAge, int pKm, boolean flex) throws Exception {
 		setpAge(pAge);
-//		isValidAge(pAge);
 		setpKm(pKm);
-//		isValidKm(pKm);
 		setFlex(flex);
 		setDate();
 	}
@@ -47,15 +50,12 @@ public class Ticket {
 		this.pKm = pKm;
 	}
 	
-	
-	
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	public void setDate() {
-		LocalDate today = LocalDate.now();
-		String formDate = today.toString();
-		this.date = formDate;
+		LocalDate date = LocalDate.now();
+		this.date = date;
 	}
 
 	public boolean isFlex() {
@@ -66,72 +66,88 @@ public class Ticket {
 	}
 
 	//	Controllo inserimento dati
-	public boolean isValidAge(int pAge) throws Exception {
-		if ((pAge < 1) || (pAge > 120)) {			
-			throw new Exception("Inserisci un età valida");
-		} 
-		return true;
+	private boolean isValidAge(int pAge) {
+		return ((pAge >= 1) && (pAge < 120));
 	} 	
-	public boolean isValidKm(double pKm) throws Exception {
-		if (pKm == 0) {			
-			throw new Exception("Inserisci un età valida");
-		}
-		return true;
+	private boolean isValidKm(int pKm) {
+		return pKm >= 0;
 	}
 	
 //	Calcolo prezzo
-	public double calcPrice() {
-		double price = ((double)pKm) * KM_PRICE;
-		double discount = calcDiscount(price, pAge);
+	public float calcPrice() {
+		BigDecimal pKm2 = new BigDecimal(pKm);
+		
+		BigDecimal price = pKm2.multiply(KM_PRICE);
+	
+		BigDecimal discount = calcDiscount(price, pAge);
+		BigDecimal divisor = new BigDecimal(100);
+		BigDecimal overp = new BigDecimal(10);
 		if (isFlex()) {
-			price += (price * 10) / 100;
+			price = price.add(price.multiply(overp).divide(divisor));
 		}
-		return price - discount;
+		return price.subtract(discount).floatValue();
 	}
 	
 //	Calcolo Sconto
-	private double calcDiscount(double price, int age) {
-		double discount;
+	private BigDecimal calcDiscount(BigDecimal price, int age) {
+		BigDecimal kmDB = new BigDecimal(0);
+		BigDecimal divisor = new BigDecimal(100);
 		if (pAge <= 18) {			
-			discount = (price * UNDER_DISCOUNT) / 100;
-		} else if (pAge >= 65 ) {
-			discount = (price * OVER_DISCOUNT) / 100;
-		} else {
-			discount = 0;
-		}
-		return discount;
+			kmDB = price.multiply(UNDER_DISCOUNT).divide(divisor);
+		} 
+		if (pAge >= 65 ) {
+			kmDB =  price.multiply(OVER_DISCOUNT).divide(divisor);;
+		} 
+		return kmDB;
 	}
 	
+////	Calcolo prezzo
+//	public double calcPrice() {
+//		double price = ((double)pKm) * KM_PRICE;
+//		double discount = calcDiscount(price, pAge);
+//		if (isFlex()) {
+//			price += (price * 10) / 100;
+//		}
+//		return price - discount;
+//	}
+//	
+////	Calcolo Sconto
+//	private double calcDiscount(double price, int age) {
+//		double discount;
+//		if (pAge <= 18) {			
+//			discount = (price * UNDER_DISCOUNT) / 100;
+//		} else if (pAge >= 65 ) {
+//			discount = (price * OVER_DISCOUNT) / 100;
+//		} else {
+//			discount = 0;
+//		}
+//		return discount;
+//	}
+	
 // Calcolo data scadenza
-	private String calcExpDate(String date) {
-		LocalDate today = LocalDate.now();
+	private LocalDate calcExpDate(LocalDate date) {
 		LocalDate expDate;
 		if (isFlex()) {
-		    expDate = today.plusDays(FLEX_DURATION);
+		    expDate = date.plusDays(FLEX_DURATION);
 		} else {			
-			expDate = today.plusDays(STANDARD_DURATION);
+			expDate = date.plusDays(STANDARD_DURATION);
 		}
-		String formExpDate = expDate.toString();
-		return formExpDate;
+		return expDate;
+	}
+// Translate boolean value 
+	private String translateBoolFlex(){	
+		return isFlex()? "Si":"No";
 	}
 
-	private String translateBool(){	
-	String res;
-	if (isFlex()) { 
-		res = "Si";
-	} else {
-		res = "No";
-	}
-	return res;
-}
+	
 	@Override
 	public String toString() {
 		return "\nDistanza da percorrere: " + getpKm()  + " km"
 				+ "\nEtà passeggero: " + getpAge()  + " anni"
 				+ "\nPrezzo: " + calcPrice() + " euro"
-				+ "\nFlessibile: " + translateBool()
+				+ "\nFlessibile: " + translateBoolFlex()
 				+ "\nData acquisto: " + getDate() 
-				+ "\nScadenza: " + calcExpDate(date) 
+				+ "\nScadenza: " + calcExpDate(date)
 				+ "\n----------------------------------\n";
 	}
 }
