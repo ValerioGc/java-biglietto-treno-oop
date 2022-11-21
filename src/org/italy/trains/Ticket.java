@@ -115,12 +115,21 @@ public class Ticket {
 		return formExpDate;
 	}
 
+	private String translateBool(){	
+	String res;
+	if (isFlex()) { 
+		res = "Si";
+	} else {
+		res = "No";
+	}
+	return res;
+}
 	@Override
 	public String toString() {
 		return "\nDistanza da percorrere: " + getpKm()  + " km"
 				+ "\nEtà passeggero: " + getpAge()  + " anni"
 				+ "\nPrezzo: " + calcPrice() + " euro"
-				+ "\nFlessibile: " + isFlex()
+				+ "\nFlessibile: " + translateBool()
 				+ "\nData acquisto: " + getDate() 
 				+ "\nScadenza: " + calcExpDate(date) 
 				+ "\n----------------------------------\n";
