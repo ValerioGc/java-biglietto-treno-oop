@@ -1,6 +1,6 @@
 # java-biglietto-treno-oop
 
-> Creation of a program that given distance and age, will calculate the ticket price based on differents discount relative to age category. Afetr the creation of the ticket it is saved in a local file. 
+> Creation of a program with errors handling, that given distance and age, will calculate the ticket price based on differents discount relative to age category. After the creation of the ticket it is saved in a local file. 
 
 <br/>
 
